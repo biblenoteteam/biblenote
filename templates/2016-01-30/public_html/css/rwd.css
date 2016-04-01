@@ -1,0 +1,212 @@
+@media all and (min-width: 1300px) {
+
+    #menu {
+        -webkit-transition: -webkit-transform 0.4s, opacity 0.4s, visibility 0.4s;
+        transition: transform 0.4s, opacity 0.4s, visibility 0.4s;
+
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+
+        body.menuOpen #menu {
+            -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+        }
+
+    div.slider ul.slides > li {
+        -webkit-transition: -webkit-transform 0.4s, visibility 0.4s;
+        transition: transform 0.4s, visibility 0.4s;
+
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+    }
+
+        div.slider ul.slides > li.active {
+            -webkit-transform: translateX(0%);
+            transform: translateX(0%);
+
+            -webkit-transition: -webkit-transform 0.4s, visibility 0.4s;
+            transition: transform 0.4s, visibility 0.4s;
+        }
+
+        div.slider ul.slides > li.active ~ li {
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+
+    div.recentlySearched ul {
+            -webkit-transition: visibility 0.4s;
+            transition: 0.4s;
+    }
+
+        div.recentlySearched ul.active {
+            z-index: 10;
+        }
+
+        div.recentlySearched ul li {
+            -webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+            transition: transform 0.4s, opacity 0.4s;
+
+            -webkit-transform: scale(0);
+            transform: scale(0);
+            opacity: 0;
+        }
+
+            div.recentlySearched ul li:nth-child(1) { -webkit-transition-delay: 0ms; }
+            div.recentlySearched ul li:nth-child(2) { -webkit-transition-delay: 100ms; }
+            div.recentlySearched ul li:nth-child(3) { -webkit-transition-delay: 200ms; }
+            div.recentlySearched ul li:nth-child(4) { -webkit-transition-delay: 300ms; }
+
+        div.recentlySearched ul.active li {
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            opacity: 1;
+        }
+
+            div.recentlySearched ul.active li:nth-child(1) { -webkit-transition-delay: 400ms; }
+            div.recentlySearched ul.active li:nth-child(2) { -webkit-transition-delay: 500ms; }
+            div.recentlySearched ul.active li:nth-child(3) { -webkit-transition-delay: 600ms; }
+            div.recentlySearched ul.active li:nth-child(4) { -webkit-transition-delay: 700ms; }
+
+
+}
+
+@media all and (max-width: 1024px) {
+
+    ul.featuredVacations div.title {
+        padding-bottom: 3%;
+    }
+
+        ul.featuredVacations div.title div.price {
+            font-size: 16px;
+        }
+
+        ul.featuredVacations div.title h3 {
+            font-size: 30px;
+        }
+
+    div.recentlySearched li {
+        width: 50%;
+        margin: 0 0 10px 0;
+    }
+
+    div.flightStatusTable td.time {
+        font-size: 20px;
+    }
+
+    div.flightStatusTable td.status,
+    div.flightStatusTable td.time,
+    div.flightStatusTable th.status,
+    div.flightStatusTable th.time {
+        padding-left: 20px;
+    }
+
+    div.flightStatusTable th.time {
+        width: 120px;
+    }
+
+    div.flightDestinations div.hr {
+        padding: 0 20px;
+    }
+
+    div.bannerOverlay div.longerStay {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        text-align: right;
+        padding: 0 160px 0 0;
+    }
+
+        div.bannerOverlay div.longerStay img {
+            left: auto;
+            right: 0;
+        }
+
+
+}
+
+@media all and (max-width: 800px) {
+
+    #footer div.menu ul {
+        display: block;
+        padding: 0;
+        width: auto;
+    }
+
+        #footer div.menu ul li:first-child {
+            margin-top: 7px;
+        }
+
+        #footer div.menu ul.wide {
+            width: auto;
+        }
+
+        div.destinationCols h2 {
+            font-size: 22px;
+        }
+
+    div.destinationCols {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    div.destinationCols > div.col {
+        width: 50%;
+        margin: 40px 0 0px 0;
+        padding: 0 10px 0 10px;
+    }
+
+        div.destinationCols > div.col:first-child,
+        div.destinationCols > div.col:first-child + div.col {
+            margin-top: 0;
+        }
+
+    #menu div.menuItems {
+        padding-left: 0;
+        width: 250px;
+    }
+
+    div.flightStatus > div.left {
+        width: 240px;
+    }
+
+    div.flightStatusTable {
+    }
+
+        div.flightStatusTable tr.details {
+            padding: 0 0 20px 0;
+        }
+
+        div.flightStatusTable td.time,
+        div.flightStatusTable td.status {
+            text-align: center;
+        }
+
+        div.flightStatusTable tr,
+        div.flightStatusTable td,
+        div.flightStatusTable th {
+            display: block;
+        }
+
+    div.bannerOverlay div.whereWeFly {
+        display: table;
+    }
+
+        div.bannerOverlay div.whereWeFly div.box {
+            float: none;
+        }
+
+        div.bannerOverlay div.whereWeFly div.box + div.box  {
+            display: table-cell;
+            padding-left: 40px;
+        }
+
+    div.whereWeFly div.placeListCols ul.placeList {
+        width: auto;
+        float: none;
+        margin: 0 0 15px 0;
+    }
+
+
+}

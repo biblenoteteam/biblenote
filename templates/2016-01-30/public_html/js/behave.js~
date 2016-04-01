@@ -1,0 +1,460 @@
+// shim layer with setTimeout fallback
+window.raf = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame
+})();
+
+SLIDER = (function($){
+
+	var body, bodyHtml, scrollTo, jQueryWindow, slidesPosition, slidesElements, windowWidth, dust, menuLinks, spider, fixed, lockHome;
+	var interf = {};
+	var calculate;
+	var contentPositions = [];
+
+	// tablica elementów, która ma być animowana wraz z współczynnikiem
+	slidesElements = [];
+
+	// funkcja do przesuwania elementów
+	calculate = function(element,distance){
+		if(element && element.e){
+			element.e.style.webkitTransform = 'translate3d('+(Math.ceil(distance*element.w))+'px,0,0)';
+			element.e.style.transform = 'translate3d('+(Math.ceil(distance*element.w))+'px,0,0)';
+		}
+	}
+
+	interf.init = function(){
+
+		body = $('body');
+		bodyHtml = $('body, html');
+		scrollTo = 0;
+		jQueryWindow = $(window);
+		slidesPosition = [];
+		windowWidth = $(window).width();
+		dust = $('div#dust');
+		menuLinks = $('div#menu').find('li');
+		spider = {
+			target : $('div.spiderWrap'),
+			scroll : 0,
+			fired: false 
+		};
+		lockHome = false;
+
+		// pierwsze drzewo musi być w odpowiednim miejscu na początku
+
+		// należy usunąć elementy na fronie w przeglądarkach, które nie obsługują requestAnimationFrame
+		if(raf == undefined){
+			$('div.frontTree1:not(.fixed):not(.crossed), div.frontTree2, div.mushrooms, div.lizard').remove();
+		}
+
+		// wyliczanie pozycji grup slideów
+		(function(){
+			var slides = $('div.slide');
+			slides.each(function(index){
+				slidesPosition[index] = $(this).position().left + $(this).width();
+			});
+		})();
+
+		// wyliczanie pozycji contentów
+		(function(){
+			var contents = $('div.content');
+			contents.each(function(index){
+				contentPositions[index] = $(this).offset().left + $(this).width();
+			});
+
+			spider.scroll = contentPositions[0]-100;
+		})();
+
+		// tablica elementów, które będą animowane
+		slidesElements[0] = [];
+		slidesElements[0].push({ e: $('#slide1 div.mud').get(0), w: 2 }); 
+		slidesElements[0].push({ e: $('#slide1 div.backTree:eq(0)').get(0), w: 1 }); 
+		slidesElements[0].push({ e: $('#slide1 div.backTree:eq(1)').get(0), w: 1 }); 
+		slidesElements[0].push({ e: $('#slide1 div.backTree:eq(2)').get(0), w: 1 }); 
+		slidesElements[0].push({ e: $('#slide1 div.frontTree2:eq(0)').get(0), w: 3 }); 
+		slidesElements[0].push({ e: $('#slide1 div.frontTree1:eq(1)').get(0), w: 2.5 }); 
+		slidesElements[0].push({ e: $('#slide1 div.frontTree2:eq(1)').get(0), w: 3 }); 
+		slidesElements[0].push({ e: $('#slide1 div.bg').get(0), w: 0.2 }); 
+
+		slidesElements[1] = [];
+		slidesElements[1].push({ e: $('#slide2 div.mud').get(0), w: 2 }); 
+		slidesElements[1].push({ e: $('#slide2 div.mushrooms').get(0), w: 2.5 }); 
+		slidesElements[1].push({ e: $('#slide2 div.backTree').get(0), w: 1 }); 
+		slidesElements[1].push({ e: $('#slide2 div.backTree').get(1), w: 1 }); 
+		slidesElements[1].push({ e: $('#slide2 div.backTree').get(2), w: 1 }); 
+		slidesElements[1].push({ e: $('#slide2 div.backTree').get(3), w: 1 }); 
+		slidesElements[1].push({ e: $('#slide2 div.frontTree2').get(0), w: 3 }); 
+		slidesElements[1].push({ e: $('#slide2 div.frontTree2').get(1), w: 3 }); 
+		slidesElements[1].push({ e: $('#slide2 div.bg').get(0), w: 0.2 }); 
+
+		slidesElements[2] = []
+		slidesElements[2].push({ e: $('#slide3 div.mud').get(0), w: 2 }); 
+		slidesElements[2].push({ e: $('#slide3 div.backTree').get(0), w: 1 }); 
+		slidesElements[2].push({ e: $('#slide3 div.backTree').get(1), w: 1 }); 
+		slidesElements[2].push({ e: $('#slide3 div.backTree').get(2), w: 1 }); 
+		slidesElements[2].push({ e: $('#slide3 div.frontTree1').get(0), w: 2.5 }); 
+		slidesElements[2].push({ e: $('#slide3 div.frontTree2').get(0), w: 2.5 }); 
+		slidesElements[2].push({ e: $('#slide3 div.lizard').get(0), w: 3 }); 
+		slidesElements[2].push({ e: $('#slide3 div.bg').get(0), w: 0.2 }); 
+
+
+		// pozostałe 
+		slidesElements[3] = [];
+		// slidesElements[3].push({ e: $('#dust').get(0), w: 0.1 }); 
+
+
+		var handleScroll = function(){
+			scrollTo = jQueryWindow.scrollLeft();
+
+			if(lockHome && scrollTo < windowWidth) {
+				jQueryWindow.scrollLeft(windowWidth);
+				return false;
+			}
+
+			if(!spider.fired && scrollTo > spider.scroll){
+				spider.target.addClass('active');
+				spider.fired = true;
+			}
+
+			if(scrollTo < slidesPosition[0]){
+				var group = slidesElements[0];
+				var len = group.length;
+				var distance = -(scrollTo);
+
+				for(var i=0 ; i<len ; i++){
+					_this = group[i];
+					calculate(_this, distance);
+				}
+			}
+
+			if(scrollTo > slidesPosition[0] - windowWidth && scrollTo < slidesPosition[1]){
+				var group = slidesElements[1];
+				var len = group.length;
+				var distance = -(scrollTo - slidesPosition[0] + windowWidth);
+
+				for(var i=0 ; i<len ; i++){
+					_this = group[i];
+					calculate(_this, distance);
+				}
+			}
+
+			if(scrollTo > slidesPosition[1] - windowWidth){
+				var group = slidesElements[2];
+				var len = group.length;
+				var distance = -(scrollTo - slidesPosition[1] + windowWidth);
+
+				for(var i=0 ; i<len ; i++){
+					_this = group[i];
+					calculate(_this, distance);
+				}
+			}
+
+			(function(){
+				var group = slidesElements[3];
+				var len = group.length;
+				var distance = -(scrollTo);
+
+				for(var i=0 ; i<len ; i++){
+					_this = group[i];
+					calculate(_this, distance);
+				}
+			})();
+
+		};
+
+		$(window).scroll(function(e){
+			raf(handleScroll);
+		});
+
+		$('body').mousewheel(function(e){
+
+			var direction = 1;
+			if(e.deltaY > 0)
+				direction = -1;
+
+			var left = $(document).scrollLeft() + 250*direction;
+
+			$('body,html').stop(false,false).animate({scrollLeft: left }, 100);
+
+			// zaznaczanie w menu odpowiedniej pozycji
+			(function(){
+				var len = contentPositions.length;
+				for(var i=0; i<len; i++){
+					if(scrollTo + 200 < contentPositions[i]){
+						menuLinks.removeClass('active').eq(i).addClass('active');
+						break;
+					}
+				}
+			})();
+
+
+		});
+	};
+
+	interf.homePage = function(){
+		$('div#menu').find('li:eq(0) a').click();
+		$('body').addClass('ready');
+		$('div.frontTree1.fixed').css({left: $(window).width() - 150});
+
+		interf.init();
+	};
+
+	interf.lockHome = function(){
+		lockHome = true;
+	};
+
+
+	return interf;
+
+})(jQuery);
+
+var EPISODES = (function($){
+	var root, menu, slides;
+
+	return {
+		init: function(){
+			var root = $('div.content');
+			var menu = root.find('div.episodes div.buttons');
+			var a = menu.find('a');
+			var slides = root.find('.episodesDesc li');
+
+			a.click(function(){
+				var index = $(this).index()/2;
+
+				a.removeClass('active').eq(index).addClass('active');
+				slides.removeClass('active').eq(index).addClass('active');
+
+				return false;
+			});
+
+		}
+	}
+
+})(jQuery);
+
+
+var TABS = (function($){
+	var root, menu, slides;
+
+	return {
+		init: function(){
+			$('div.tabs').each(function(){
+				var root = $(this);
+				var menu = root.find('div.tabsMenu');
+				var a = menu.find('a');
+				var slides = root.find('div.wrap div.tab');
+
+				a.click(function(){
+					var index = $(this).index()/2;
+
+					a.removeClass('active').eq(index).addClass('active');
+					slides.removeClass('active').eq(index).addClass('active');
+
+					return false;
+				});
+			});
+
+		}
+	}
+
+})(jQuery);
+
+MENU = (function($){
+	var menu, li, a;
+	return {
+		init: function(){
+			menu = $('div#menu');			
+			li = menu.find('li');
+			a = li.find('a');
+
+			a.click(function(){
+				var href = $(this).attr('href');
+				var target = $(href);
+				var left = ($(window).width()-960)/2;
+
+				// gdy _blank trzeba przenieść na nową kartę a nie scrollować content
+				if($(this).attr('target') == '_blank')
+					return true;
+
+				if(target.size())
+					$('body,html').stop(false,false).animate({scrollLeft: target.offset().left - left}, 1500, function(){
+						SLIDER.lockHome();
+					});
+
+				li.removeClass('active');
+				$(this).parent().addClass('active');
+
+
+				return false;
+			});
+		}
+	}
+})(jQuery);
+
+var REFERALS = (function($){
+	var a, menu, li;
+
+	return {
+		init: function(){
+			a = $('a').filter('[data-scroll]');
+			menu = $('div#menu');			
+			li = menu.find('li');
+
+			a.click(function(){
+				var index = parseInt($(this).attr('data-scroll'));
+				li.eq(index).children().click();
+
+				return false;
+			});
+		}
+	}
+})(jQuery);
+
+var DUST = (function($){
+	var root, dust, dustDOM, elements, calculate, onMove, lastEvent, body, jQueryWindow;
+	elements = 40;
+
+	// funkcja do przesuwania elementów
+	calculate = function(element,x,y){
+		if(element){
+			element.style.webkitTransform = 'translate3d('+(Math.ceil(x*0.1))+'px,'+(Math.ceil(y*0.1))+'px,0)';
+			element.style.transform = 'translate3d('+(Math.ceil(x*0.1))+'px,'+(Math.ceil(y*0.1))+'px,0)';
+		}
+	}
+
+	onMove = function(){
+		var length = dustDOM.length;
+		for(var i=0; i<length; i++)
+			calculate(dustDOM[i], lastEvent.x, lastEvent.y);
+	}
+
+	return {
+		init: function(){
+			root = $('div#dust');
+			jQueryWindow = $(window);
+			var width = root.width() - 200;
+			var height = jQueryWindow.height();
+			dustDOM = [];
+			lastEvent = {};
+
+			// generowanie kurzu
+			var html = '';
+			for(var i=0; i<elements; i++){
+				html += '<div></div>';
+			}
+			root.get(0).innerHTML = html;
+
+			dust = root.children();
+			dust.each(function(i){
+				var x = Math.floor(Math.random() * width + 100);				
+				var y = Math.floor(Math.random() * height);				
+
+				$(this).css({left: x, top: y});
+			});
+
+			dustDOM.push(root.get(0));
+
+			$('body').mousemove(function(e){
+				lastEvent.x = (width/2) - e.pageX + jQueryWindow.scrollLeft();
+				lastEvent.y = (height/2) - e.pageY;
+				if(raf)
+					raf(onMove);
+			});
+						
+	        }
+	}
+
+})(jQuery);
+
+FANCYVIDEO = (function($){
+	var elements;
+	return {
+		init: function(){
+		      elements = $('a[data-fancyvideo]');
+		      elements.fancybox({
+				scrolling: 'no',
+				onComplete: function(){
+					var video = $('div#fancybox-content video').get(0);
+					if(video && video.play)
+			      			video.play();
+
+			  	}
+		      });
+		}
+
+	}
+})(jQuery);
+
+ANIMATEDIMAGE = (function($){
+	var elements;
+	return {
+		init: function(){
+			elements = $('img[data-gif]');
+
+			elements.each(function(){
+				var parent = $(this).parent();
+				var gifAddress = $(this).attr('data-gif');
+				var gif = false;
+
+				parent.mouseover(function(){
+					gif = $('<img class="animated">');					
+					gif.attr('src', gifAddress);
+					gif.appendTo(parent);
+				});
+
+				parent.mouseout(function(){
+					if(gif.remove)
+						gif.remove();
+				});
+
+				
+			});
+	      	}
+	}
+})(jQuery);
+
+ANIMATEVIDEO = (function($){
+	var elements;
+
+	return {
+		init: function(){
+			elements = $('#video video, div#biography video, #home video').parent();
+
+			elements.hover(function(){
+				var video = $(this).find('video').get(0);
+				if(video && video.play) {
+					video.play();
+				}
+			}, function(){
+				var video = $(this).find('video').get(0);
+				if(video && video.pause) {
+					video.pause();
+					video.currentTime = 0;
+				}
+
+			});	
+	        }
+	}
+})(jQuery);
+
+
+$(document).ready(function(){
+
+	MENU.init();
+	EPISODES.init();
+	REFERALS.init();
+	DUST.init();
+	FANCYVIDEO.init();
+	ANIMATEDIMAGE.init();
+	ANIMATEVIDEO.init();
+	TABS.init();
+
+
+	// osbługa galerii
+	$('#gallery div.thumbs a').fancybox({
+		'transitionIn'	:	'swing',
+		'transitionOut'	:	'swing'
+	});
+});
+
+
