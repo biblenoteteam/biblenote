@@ -1,0 +1,28 @@
+/* Autor: Marcin Kulpa 
+ * marcin.kulpa (at) gmail
+ * marcin.kulpa (at) jabber.com */
+
+a img { 
+	border: 0;
+}
+input[type=submit] {
+	cursor: pointer;
+}
+html,body,div,span,
+ul,ol,li,dl,dd,dt,
+h1,h2,h3,h4,h5,h6,p,q,blockquote,a,
+label,form,fieldset,legend,
+table,caption,tbody,tfoot,thead,tr,th,td
+img,object
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+	outline: none;
+}
+
+
+body {
+	font-size: small;
+}
