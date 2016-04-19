@@ -6,7 +6,7 @@ angular
         '$scope',
         '$state',
         function($scope, $state) {
-
+        	$scope.selectedForm = 'login';
 
         }]);
 

@@ -38,7 +38,7 @@ angular.module('BibleNote', [
         '$scope',
         '$state',
         function($scope, $state) {
-
+        	$scope.selectedForm = 'login';
 
         }]);
 

@@ -1,3 +1,17 @@
 <div id="outer">
-  trolololo
+    <div id="mainHeader">
+        <div id="mainLogo" ui-sref="main">
+        <span class="mainBlue">B</span>ible<span class="mainBlue">N</span>ote
+        </div>
+
+        <div class="box"  ng-class="{'active' : selectedForm == 'register'}" ng-click="selectedForm = 'register'">
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
+
+        </div>
+        <div class="box" ng-class="{'active' : selectedForm == 'login'}" ng-click="selectedForm = 'login'">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        </div>
+
+
+    </div>
 </div>
