@@ -1,17 +1,19 @@
 <div id="outer">
     <div id="mainHeader">
-        <div id="mainLogo" ui-sref="main">
+        <div id="mainLogo" ng-click="goMain()">
         <span class="mainBlue">B</span>ible<span class="mainBlue">N</span>ote
         </div>
 
-        <div class="box"  ng-class="{'active' : selectedForm == 'register'}" ng-click="selectedForm = 'register'">
+        <div class="box" ui-sref="register" ng-class="{'active' : currentState == 'register'}">
         <i class="fa fa-user-plus" aria-hidden="true"></i>
 
         </div>
-        <div class="box" ng-class="{'active' : selectedForm == 'login'}" ng-click="selectedForm = 'login'">
+        <div class="box" ui-sref="login" ng-class="{'active' : currentState == 'login'}">
         <i class="fa fa-user" aria-hidden="true"></i>
         </div>
 
 
     </div>
+
+    <div class="ui-view-container"><div class="fade" ui-view></div></div>
 </div>
