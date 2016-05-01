@@ -4,14 +4,17 @@
         <span class="mainBlue">B</span>ible<span class="mainBlue">N</span>ote
         </div>
 
-        <div class="box" ui-sref="register" ng-class="{'active' : currentState == 'register'}">
+        <div class="box" ui-sref="register" ng-class="{'active' : currentState == 'register'}" ng-if="!logged">
         <i class="fa fa-user-plus" aria-hidden="true"></i>
 
         </div>
-        <div class="box" ui-sref="login" ng-class="{'active' : currentState == 'login'}">
+        <div class="box" ui-sref="login" ng-class="{'active' : currentState == 'login'}" ng-if="!logged">
         <i class="fa fa-user" aria-hidden="true"></i>
         </div>
 
+        <div class="box" ui-sref="login" ng-if="logged" ng-click="logOut()">
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+        </div>
 
     </div>
 

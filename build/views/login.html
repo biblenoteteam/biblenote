@@ -2,8 +2,8 @@
     <div>
         <form>
             <input type="email" placeholder="email" class="largeInput" ng-model="loginVariables.email">
-            <input type="password" placeholder="password" class="largeInput" ng-model="loginVariables.password">
-            <button class="buttonMedium" type="button" ng-disabled="validator()">Zaloguj
+            <input type="password" placeholder="hasło" class="largeInput" ng-model="loginVariables.password">
+            <button class="buttonMedium" type="button" ng-disabled="validator()" ng-click="login()">zaloguj
             </button>
         </form>
     </div>

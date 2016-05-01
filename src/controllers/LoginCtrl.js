@@ -6,7 +6,8 @@ angular
         '$scope',
         '$state',
         '$rootScope',
-        function($scope, $state, $rootScope) {
+        'AuthorizationSrvc',
+        function($scope, $state, $rootScope, AuthorizationSrvc) {
             $scope.loginVariables = {
                 'email': '',
                 'password': ''
@@ -19,7 +20,10 @@ angular
                     return true;
                 }
             };
+            $scope.login = function() {
+                AuthorizationSrvc.login($scope.loginVariables);
 
+            };
 
 
 

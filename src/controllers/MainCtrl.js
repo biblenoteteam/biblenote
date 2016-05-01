@@ -15,12 +15,14 @@ angular
             $scope.init = function() {
                 AuthorizationSrvc.isLogged();
             };
-            $scope.init();
+                $scope.init();
 
             $scope.goMain = function(){
                 $state.reload();
             };
-
+            $scope.logOut = function(){
+                AuthorizationSrvc.logOut();
+            };
 
         }
     ]);

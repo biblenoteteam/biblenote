@@ -1,3 +1,12 @@
 <div id="outer">
-    register
+    <div>
+    	<form>
+    		<input type="text" placeholder="imię" class="largeInput" ng-model="registerVariables.surname">
+    		<input type="text" placeholder="nazwisko" class="largeInput" ng-model="registerVariables.name">
+    		<input type="email" placeholder="email" class="largeInput" ng-model="registerVariables.email">
+    		<input type="password" placeholder="hasło" class="largeInput" ng-model="registerVariables.password1">
+    		<input type="password" placeholder="potwierdź hasło" class="largeInput" ng-model="registerVariables.password2">
+    		<button class="buttonMedium" type="button" ng-disabled="validator()">zarejestruj</button>
+    	</form>
+    </div>
 </div>

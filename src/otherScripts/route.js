@@ -5,6 +5,7 @@ angular.module('BibleNote.Routes', [
   'BibleNote.Controllers.MainCtrl',
   'BibleNote.Controllers.LoginCtrl',
   'BibleNote.Controllers.RegisterCtrl',
+  'BibleNote.Controllers.MyNotesCtrl',
   
 ])
 .config([
@@ -31,6 +32,12 @@ angular.module('BibleNote.Routes', [
         parent: 'main',
         controller: 'RegisterCtrl',
       })
+       .state('myNotes', {
+        url: '/myNotes',
+        templateUrl: 'views/mynotes.html',
+        parent: 'main',
+        controller: 'MyNotesCtrl',
+       })
      
 
     $urlRouterProvider.otherwise('/main');
@@ -38,10 +45,17 @@ angular.module('BibleNote.Routes', [
 
 
   }
-]).run(function ($state,$rootScope) {
+]).run(function ($state,$rootScope,$localStorage) {
   $rootScope.$on('$stateChangeStart', 
 function(event, toState, toParams, fromState, fromParams){ 
     $rootScope.currentState = toState.name;
+
+    if ($localStorage.user){
+      $rootScope.logged = true;
+    }
+    else{
+      $rootScope.logged = false;
+    }
 })
 
     
