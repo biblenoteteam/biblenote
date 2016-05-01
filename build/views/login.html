@@ -1,3 +1,10 @@
 <div id="outer">
-    login
+    <div>
+        <form>
+            <input type="email" placeholder="email" class="largeInput" ng-model="loginVariables.email">
+            <input type="password" placeholder="password" class="largeInput" ng-model="loginVariables.password">
+            <button class="buttonMedium" type="button" ng-disabled="validator()">Zaloguj
+            </button>
+        </form>
+    </div>
 </div>
