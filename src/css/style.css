@@ -168,7 +168,12 @@ button[disabled]:hover{
     background-color: #12A5F4;
     color:white;
 }
-
+.table{
+    width:80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 1px solid black;
+}
 
 
 

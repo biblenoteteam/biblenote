@@ -21,8 +21,13 @@ angular
                 }
             };
             $scope.login = function() {
-                AuthorizationSrvc.login($scope.loginVariables);
+                AuthorizationSrvc.login($scope.loginVariables).then(function(data){
+                        AuthorizationSrvc.successLogin(data.data);
 
+                    }, function(data){
+
+
+                    })
             };
 
 

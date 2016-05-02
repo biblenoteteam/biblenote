@@ -6,7 +6,8 @@ angular
         '$scope',
         '$state',
         '$rootScope',
-        function($scope, $state, $rootScope) {
+        'AuthorizationSrvc',
+        function($scope, $state, $rootScope, AuthorizationSrvc) {
         	$scope.registerVariables = {
         		'surname' : '',
         		'name' : '',
@@ -25,5 +26,15 @@ angular
                     return true;
                 }
             };
+
+            	$scope.register = function(){
+            		AuthorizationSrvc.register($scope.registerVariables).then(function(data){
+            			AuthorizationSrvc.successLogin(data.data[0]);
+
+            		}, function(data){
+
+
+            		})
+            	};
         }]);
 

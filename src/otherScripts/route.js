@@ -6,7 +6,10 @@ angular.module('BibleNote.Routes', [
   'BibleNote.Controllers.LoginCtrl',
   'BibleNote.Controllers.RegisterCtrl',
   'BibleNote.Controllers.MyNotesCtrl',
-  
+  'BibleNote.Controllers.AddNotesCtrl',
+  'BibleNote.Controllers.UsersCtrl',
+  'BibleNote.Controllers.MyProfilCtrl',
+
 ])
 .config([
   '$stateProvider',
@@ -32,12 +35,30 @@ angular.module('BibleNote.Routes', [
         parent: 'main',
         controller: 'RegisterCtrl',
       })
-       .state('myNotes', {
-        url: '/myNotes',
+       .state('mynotes', {
+        url: '/mynotes',
         templateUrl: 'views/mynotes.html',
         parent: 'main',
         controller: 'MyNotesCtrl',
-       })
+      })
+        .state('addnotes', {
+        url: '/addnotes',
+        templateUrl: 'views/addnotes.html',
+        parent: 'main',
+        controller: 'AddNotesCtrl',
+      })
+        .state('users', {
+        url: '/users',
+        templateUrl: 'views/users.html',
+        parent: 'main',
+        controller: 'UsersCtrl',
+      })
+        .state('myprofil', {
+        url: '/myprofil',
+        templateUrl: 'views/myprofil.html',
+        parent: 'main',
+        controller: 'MyProfilCtrl',
+      })
      
 
     $urlRouterProvider.otherwise('/main');
@@ -53,8 +74,10 @@ function(event, toState, toParams, fromState, fromParams){
     if ($localStorage.user){
       $rootScope.logged = true;
     }
-    else{
+    else if(toState.name != 'login' && toState.name != 'register'){
       $rootScope.logged = false;
+      event.preventDefault();
+      $state.go('login');
     }
 })
 

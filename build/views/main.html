@@ -11,11 +11,29 @@
         <div class="box" ui-sref="login" ng-class="{'active' : currentState == 'login'}" ng-if="!logged">
         <i class="fa fa-user" aria-hidden="true"></i>
         </div>
+        <div ng-if="logged">
 
-        <div class="box" ui-sref="login" ng-if="logged" ng-click="logOut()">
+        <div class="box" ui-sref="login" ng-click="logOut()" >
         <i class="fa fa-sign-out" aria-hidden="true"></i>
         </div>
 
+        <div class="box" ui-sref="myprofil" ng-class="{'active' : currentState == 'myprofil'}">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        </div>
+
+        <div class="box" ui-sref="users" ng-class="{'active' : currentState == 'users'}">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        </div>
+
+        <div class="box" ui-sref="addnotes" ng-class="{'active' : currentState == 'addnotes'}">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        </div>
+
+        <div class="box" ui-sref="mynotes" ng-class="{'active' : currentState == 'mynotes'}">
+        <i class="fa fa-file-text" aria-hidden="true"></i>
+        </div>
+
+        </div>
     </div>
 
     <div class="ui-view-container"><div class="fade" ui-view></div></div>

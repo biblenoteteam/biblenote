@@ -12,7 +12,10 @@ angular.module('BibleNote', [
   'BibleNote.Controllers.LoginCtrl',
   'BibleNote.Controllers.RegisterCtrl',
   'BibleNote.Controllers.MyNotesCtrl',
-  
+  'BibleNote.Controllers.AddNotesCtrl',
+  'BibleNote.Controllers.UsersCtrl',
+  'BibleNote.Controllers.MyProfilCtrl',
+
 ])
 .config([
   '$stateProvider',
@@ -38,12 +41,30 @@ angular.module('BibleNote', [
         parent: 'main',
         controller: 'RegisterCtrl',
       })
-       .state('myNotes', {
-        url: '/myNotes',
+       .state('mynotes', {
+        url: '/mynotes',
         templateUrl: 'views/mynotes.html',
         parent: 'main',
         controller: 'MyNotesCtrl',
-       })
+      })
+        .state('addnotes', {
+        url: '/addnotes',
+        templateUrl: 'views/addnotes.html',
+        parent: 'main',
+        controller: 'AddNotesCtrl',
+      })
+        .state('users', {
+        url: '/users',
+        templateUrl: 'views/users.html',
+        parent: 'main',
+        controller: 'UsersCtrl',
+      })
+        .state('myprofil', {
+        url: '/myprofil',
+        templateUrl: 'views/myprofil.html',
+        parent: 'main',
+        controller: 'MyProfilCtrl',
+      })
      
 
     $urlRouterProvider.otherwise('/main');
@@ -59,8 +80,10 @@ function(event, toState, toParams, fromState, fromParams){
     if ($localStorage.user){
       $rootScope.logged = true;
     }
-    else{
+    else if(toState.name != 'login' && toState.name != 'register'){
       $rootScope.logged = false;
+      event.preventDefault();
+      $state.go('login');
     }
 })
 
@@ -90,21 +113,90 @@ function(event, toState, toParams, fromState, fromParams){
             }
         };
         this.login = function(user){
-            //rest api
+            var url='http://notatka.52prawdy.pl/restAPI/login/';
+            var obj={
+                'email': user.email,
+                'password': user.password,
+            };
+            var req={
+                'method': 'POST',
+                'url': url,
+                'data': obj,
+                'headers':{
+                    'Content-Type':'text/plain',
+                }
+            };
+            return $http(req);
+        };
+        this.successLogin = function(user){
             $localStorage.user = user;
             $rootScope.logged = true;
-            $state.go('myNotes');
+            $state.go('mynotes');
+
         };
         this.logOut = function(){
             $localStorage.user = null;
             $rootScope.logged = false;
             $state.go('login');
+        };
+        this.getUsers = function(){
+            var user= $localStorage.user;
+            var url= 'http://notatka.52prawdy.pl/restAPI/users/';
+            var obj={
+                'token': user.token,
+                'user_id': user.id,
+            };
+            var req= {
+                'method': 'POST',
+                'data': obj,
+                'url': url,
+                'headers':{
+                    'Content-Type': 'text/plain',
+                }
+            };            
+            return $http(req);
+        };
+        this.register = function(user){
+            var url='http://notatka.52prawdy.pl/restAPI/register/';
+            var obj={
+                'name': user.surname,
+                'lastname': user.name,
+                'email': user.email,
+                'password': user.password1,
+            };
+            var req={
+                'method': 'POST',
+                'url': url,
+                'data': obj,
+                'headers':{
+                    'Content-Type':'text/plain',
+                },
+            };
+            return $http(req);
+
         }
 
 
 
 
 }]);
+;angular
+    .module('BibleNote.Controllers.AddNotesCtrl', [
+        'ui.router',
+    ])
+    .controller('AddNotesCtrl', [
+        '$scope',
+        '$state',
+        '$rootScope',
+        function($scope, $state, $rootScope) {
+    
+
+
+
+
+
+
+        }]);
 ;angular
     .module('BibleNote.Controllers.LoginCtrl', [
         'ui.router',
@@ -128,8 +220,13 @@ function(event, toState, toParams, fromState, fromParams){
                 }
             };
             $scope.login = function() {
-                AuthorizationSrvc.login($scope.loginVariables);
+                AuthorizationSrvc.login($scope.loginVariables).then(function(data){
+                        AuthorizationSrvc.successLogin(data.data);
 
+                    }, function(data){
+
+
+                    })
             };
 
 
@@ -183,6 +280,23 @@ function(event, toState, toParams, fromState, fromParams){
 
         }]);
 ;angular
+    .module('BibleNote.Controllers.MyProfilCtrl', [
+        'ui.router',
+    ])
+    .controller('MyProfilCtrl', [
+        '$scope',
+        '$state',
+        '$rootScope',
+        function($scope, $state, $rootScope) {
+    
+
+
+
+
+
+
+        }]);
+;angular
     .module('BibleNote.Controllers.RegisterCtrl', [
         'ui.router',
     ])
@@ -190,7 +304,8 @@ function(event, toState, toParams, fromState, fromParams){
         '$scope',
         '$state',
         '$rootScope',
-        function($scope, $state, $rootScope) {
+        'AuthorizationSrvc',
+        function($scope, $state, $rootScope, AuthorizationSrvc) {
         	$scope.registerVariables = {
         		'surname' : '',
         		'name' : '',
@@ -209,6 +324,43 @@ function(event, toState, toParams, fromState, fromParams){
                     return true;
                 }
             };
+
+            	$scope.register = function(){
+            		AuthorizationSrvc.register($scope.registerVariables).then(function(data){
+            			AuthorizationSrvc.successLogin(data.data[0]);
+
+            		}, function(data){
+
+
+            		})
+            	};
         }]);
 
+;angular
+    .module('BibleNote.Controllers.UsersCtrl', [
+        'ui.router',
+    ])
+    .controller('UsersCtrl', [
+        '$scope',
+        '$state',
+        '$rootScope',
+        'AuthorizationSrvc',
+        function($scope, $state, $rootScope, AuthorizationSrvc) {
+    	$scope.users=[];
+
+        	$scope.getUsers = function(){
+            		AuthorizationSrvc.getUsers().then(function(data){
+            		$scope.users=data.data;
+
+            		}, function(data){
+
+
+            		})
+            	};
+
+            	$scope.getUsers();
+
+
+
+        }]);
 })();
